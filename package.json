@@ -1,0 +1,20 @@
+{
+  "name": "budgets",
+  "version": "0.0.0",
+  "description": "A small money / buget tracker",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^4.3.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.2.0",
+    "http-errors": "^1.8.0"
+  }
+}
