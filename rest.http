@@ -1,0 +1,18 @@
+GET http://localhost:3000
+
+### 404 Route
+GET http://localhost:3000/bullshit
+
+
+# AUTH ROUTES
+### Register
+POST http://localhost:3000/auth/register
+
+### Login
+POST http://localhost:3000/auth/login
+
+### Logout
+POST http://localhost:3000/auth/logout
+
+### Refresh Token
+POST http://localhost:3000/auth/refresh-token
