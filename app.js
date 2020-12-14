@@ -1,5 +1,6 @@
 require("./init/env.init");
 require("./init/mongoodb.init");
+require("./init/adminAccount.init");
 require("./init/redis.init");
 
 const express = require("express");

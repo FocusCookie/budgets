@@ -18,7 +18,7 @@ client.on("end", () => {
   debug("Client is disconnected from redis.");
 });
 
-client.on("error", () => {
+client.on("error", (err) => {
   debug(err.message);
 });
 

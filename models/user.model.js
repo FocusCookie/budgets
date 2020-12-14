@@ -20,6 +20,11 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    default: "user",
+    required: true,
+  },
 });
 
 // .pre is a middleware of mongoose
