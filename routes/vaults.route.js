@@ -10,7 +10,15 @@ router.put("/:id", verfiyAccessToken, VaultsController.editVault);
 router.delete("/:id", verfiyAccessToken, VaultsController.deleteVault);
 
 // Vault Sharing
-router.post("/share/:id", verfiyAccessToken, VaultsController.shareVaultWith);
-router.delete("/share/:id", verfiyAccessToken, VaultsController.revokeSharing);
+router.post(
+  "/:id/share/:userId",
+  verfiyAccessToken,
+  VaultsController.shareVaultWith
+);
+router.delete(
+  "/:id/share/:userId",
+  verfiyAccessToken,
+  VaultsController.revokeSharing
+);
 
 module.exports = router;
