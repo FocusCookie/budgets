@@ -10,7 +10,7 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "email": "admin@app.com",
+    "email": "other@app.com",
     "password": "12345678",
     "name":"Stephan"
 }
@@ -20,7 +20,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "admin@app.com",
+    "email": "other@app.com",
     "password": "12345678"
 }
 
@@ -40,3 +40,6 @@ Content-Type: application/json
 {
     "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiU3RlcGhhbiIsImlhdCI6MTYwNzk2MjU2MiwiZXhwIjoxNjM5NTIwMTYyLCJhdWQiOiI1ZmQ3OGY5MDBmZjg4NjA1N2Y2Mzg3MmMiLCJpc3MiOiJidWRnZXRzLmlvIn0.FZKPCnWD6TvZLl78hDwi6bC9T9yfMkkOuwoYXxaAk68"
 }
+
+
+

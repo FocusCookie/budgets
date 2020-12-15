@@ -1,0 +1,51 @@
+
+# VAULTS
+### GET ALL VAULTS
+GET http://localhost:3000/vaults
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiU3RlcGhhbiIsImlhdCI6MTYwNzk3NTc5OSwiZXhwIjoxNjA3OTgyOTk5LCJhdWQiOiI1ZmQ3YzJjZjM4N2MxNTE0YTdjYTNhODIiLCJpc3MiOiJidWRnZXRzLmlvIn0.4YUuKj8TnyAOB4rFzXvEPm3xh10c1Ez77SNYXY_hKi4
+
+
+### CREATE A VAULT
+POST http://localhost:3000/vaults
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiU3RlcGhhbiIsImlhdCI6MTYwNzk3NTYzMiwiZXhwIjoxNjA3OTgyODMyLCJhdWQiOiI1ZmQ3YzJjZjM4N2MxNTE0YTdjYTNhODIiLCJpc3MiOiJidWRnZXRzLmlvIn0.5jr2JydTzTemd-s45Pcd_qymgfdt-Iw2YoFKcouNZg8
+Content-Type: application/json
+
+{
+    "name":"Stephans Vault"
+}
+
+### EDIT A VAULT
+PUT http://localhost:3000/vaults/5fd7b273efcac91284245879
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJpYXQiOjE2MDc5NzQ5MjEsImV4cCI6MTYwNzk4MjEyMSwiYXVkIjoiNWZkNzk0YTI3OWExNDYwN2FjNTdlY2FlIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.-YsSipz4-ZUgpN0rkXGU1QhHqqyKxYgeaOM3NcQL8r4
+Content-Type: application/json
+
+{
+    "name":"edit vault 2"
+}
+
+### DELETE A VAULT
+DELETE http://localhost:3000/vaults/5fd7b273efcac91284245879
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJpYXQiOjE2MDc5NzQ5MjEsImV4cCI6MTYwNzk4MjEyMSwiYXVkIjoiNWZkNzk0YTI3OWExNDYwN2FjNTdlY2FlIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.-YsSipz4-ZUgpN0rkXGU1QhHqqyKxYgeaOM3NcQL8r4
+
+
+
+
+
+# VAULT SHARING
+### Share a vault
+POST http://localhost:3000/vaults/share/5fd7c2e2387c1514a7ca3a83
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiU3RlcGhhbiIsImlhdCI6MTYwNzk3NTc5OSwiZXhwIjoxNjA3OTgyOTk5LCJhdWQiOiI1ZmQ3YzJjZjM4N2MxNTE0YTdjYTNhODIiLCJpc3MiOiJidWRnZXRzLmlvIn0.4YUuKj8TnyAOB4rFzXvEPm3xh10c1Ez77SNYXY_hKi4
+Content-Type: application/json
+
+{
+    "userId": "5fd794a279a14607ac57ecae"
+}
+
+### Share a vault
+DELETE http://localhost:3000/vaults/share/5fd7c2e2387c1514a7ca3a83
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiU3RlcGhhbiIsImlhdCI6MTYwNzk3NTc5OSwiZXhwIjoxNjA3OTgyOTk5LCJhdWQiOiI1ZmQ3YzJjZjM4N2MxNTE0YTdjYTNhODIiLCJpc3MiOiJidWRnZXRzLmlvIn0.4YUuKj8TnyAOB4rFzXvEPm3xh10c1Ez77SNYXY_hKi4
+Content-Type: application/json
+
+{
+    "userId": "5fd794a279a14607ac57ecae"
+}

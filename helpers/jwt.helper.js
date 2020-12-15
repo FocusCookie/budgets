@@ -39,7 +39,6 @@ module.exports = {
           err.name === "JsonWebTokenError" ? "Unauthorized" : err.message;
         next(createError.Unauthorized(message));
       } else {
-        debug(payload);
         req.payload = payload;
         next();
       }
@@ -109,6 +108,24 @@ module.exports = {
           });
         }
       );
+    });
+  },
+
+  getTokenPayload: (req) => {
+    return new Promise((resolve, reject) => {
+      // Split the TOken from the Bearer token string
+      const token = req.headers.authorization.split(" ")[1];
+
+      JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
+        if (err) {
+          debug("%o", err);
+          const message =
+            err.name === "JsonWebTokenError" ? "Unauthorized" : err.message;
+          reject(createError.Unauthorized(message));
+        } else {
+          resolve(payload);
+        }
+      });
     });
   },
 };

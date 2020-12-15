@@ -1,4 +1,3 @@
-const { clear } = require("console");
 const Joi = require("joi");
 
 const register = Joi.object({

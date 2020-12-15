@@ -1,11 +1,13 @@
 const expenses = require("../routes/expenses.route");
 const auth = require("../routes/auth.route");
+const vaults = require("../routes/vaults.route");
 const debug = require("debug")("app:init-routes");
 const createError = require("http-errors");
 
 module.exports = (app) => {
-  app.use("/expenses", expenses);
   app.use("/auth", auth);
+  app.use("/vaults", vaults);
+  app.use("/expenses", expenses);
 
   app.get("/", (req, res) => {
     res.send("This is the Budgets App.");
