@@ -1,0 +1,24 @@
+### AS ADMIN GET ALL USERS
+GET http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJtYWluVmF1bHQiOiI1ZmQ4Y2ZiMDcwNDc4ZjI2Y2QwMjQ3NGEiLCJpYXQiOjE2MDgwNDYwMjgsImV4cCI6MTYwODA1MzIyOCwiYXVkIjoiNWZkOGM5MmUxZDQyNjIyNDJkZDY0MWMzIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.tjShIGfIXL_ZJra972pScF2_hk42P9_js9wwhNxjLME
+
+
+### EDIT A USER
+PUT http://localhost:3000/users/5fd8c9441d4262242dd641c4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiU3RlcGhhbiBlZGl0IGJ5IFN0ZXBoYW4iLCJyb2xlIjoidXNlciIsImlhdCI6MTYwODA0MzI0OSwiZXhwIjoxNjA4MDUwNDQ5LCJhdWQiOiI1ZmQ4Yzk0NDFkNDI2MjI0MmRkNjQxYzQiLCJpc3MiOiJidWRnZXRzLmlvIn0.dS_me6WlxGNPfjz-x4DhR33djwSymZBuj8UsabelY3k
+Content-Type: application/json
+
+{
+    "email": "other@app.com",
+    "password": "12345678",
+    "name":"Stephan"
+}
+
+
+### DELETE A USER
+DELETE http://localhost:3000/users/5fd8cd876094f4261e1b37d5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MDgwNDM5MzIsImV4cCI6MTYwODA1MTEzMiwiYXVkIjoiNWZkOGM5MmUxZDQyNjIyNDJkZDY0MWMzIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.PfBFmxubluFhF3yhaKSNJGPt7KGIfpV2AIFXfXoGqP0
+
+### SET MAIN VAULT FOR USER
+POST http://localhost:3000/users/5fd8c92e1d4262242dd641c3/mainvault/5fd8cfb070478f26cd02474a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJtYWluVmF1bHQiOiI1ZmQ4ZDFjMzE5MDdhNjI3YmZkNmY2NzQiLCJpYXQiOjE2MDgwNDU1NTQsImV4cCI6MTYwODA1Mjc1NCwiYXVkIjoiNWZkOGM5MmUxZDQyNjIyNDJkZDY0MWMzIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.kx32uNZkwsT5acQ_qnWrA1kOqsammj5OkljSiLC9fs0

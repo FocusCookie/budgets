@@ -3,7 +3,6 @@ const createError = require("http-errors");
 const vaultsValidation = require("../helpers/validations/vaults.validation");
 const jwt = require("../helpers/jwt.helper");
 const Vault = require("../models/vault.model");
-const User = require("../models/user.model");
 var ObjectId = require("mongoose").Types.ObjectId;
 
 module.exports = {

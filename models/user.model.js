@@ -25,7 +25,7 @@ const UserSchema = new Schema({
     default: "user",
     required: true,
   },
-  mainVault: [{ type: mongoose.Schema.Types.ObjectId, ref: "Vault" }],
+  mainVault: { type: mongoose.Schema.Types.ObjectId, ref: "Vault" },
 });
 
 // .pre is a middleware of mongoose

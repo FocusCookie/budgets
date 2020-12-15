@@ -1,4 +1,4 @@
-const debug = require("debug")("app:server");
+const debug = require("debug")("dev:expenses-controller");
 const createError = require("http-errors");
 
 module.exports = {

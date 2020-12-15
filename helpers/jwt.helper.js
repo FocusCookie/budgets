@@ -2,12 +2,15 @@ const JWT = require("jsonwebtoken");
 const createError = require("http-errors");
 const debug = require("debug")("dev:jwt");
 const redisClient = require("../init/redis.init");
-const { refreshToken } = require("../controllers/auth.controller");
 
 module.exports = {
   signAccessToken: (user) => {
     return new Promise((resolve, reject) => {
-      const payload = { name: user.name };
+      const payload = {
+        name: user.name,
+        role: user.role,
+        mainVault: user.mainVault,
+      };
       const secret = process.env.ACCESS_TOKEN_SECRET;
       const options = {
         expiresIn: "2h",

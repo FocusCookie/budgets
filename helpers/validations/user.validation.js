@@ -19,4 +19,13 @@ const login = Joi.object({
     .required(),
 });
 
-module.exports = { register, login };
+const edit = Joi.object({
+  email: Joi.string().email().lowercase(),
+  password: Joi.string()
+    .min(8)
+    .max(30)
+    .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+  name: Joi.string().min(3).max(30),
+});
+
+module.exports = { register, login, edit };
