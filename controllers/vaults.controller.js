@@ -1,4 +1,4 @@
-const debug = require("debug")("app:server");
+const debug = require("debug")("dev:vaults");
 const createError = require("http-errors");
 const vaultsValidation = require("../helpers/validations/vaults.validation");
 const jwt = require("../helpers/jwt.helper");

@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const CategoriesController = require("../controllers/categories.controller");
 const { verfiyAccessToken } = require("../helpers/jwt.helper");
-const ExspensesController = require("../controllers/expenses.controller");
 
-router.get("/", verfiyAccessToken, ExspensesController.root);
+router.get("/", verfiyAccessToken, CategoriesController.getAll);
 
 module.exports = router;

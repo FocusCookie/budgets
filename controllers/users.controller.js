@@ -1,4 +1,4 @@
-const debug = require("debug")("dev:users-controller");
+const debug = require("debug")("dev:users");
 const createError = require("http-errors");
 const User = require("../models/user.model");
 const Vault = require("../models/vault.model");
@@ -11,7 +11,7 @@ var ObjectId = require("mongoose").Types.ObjectId;
 module.exports = {
   getAllUsers: async (req, res, next) => {
     try {
-      const tokenPayload = await jwt.getTokenPayload(req);
+      const tokenPayload = req.payload;
       const userRole = tokenPayload.role; // aud = user id, can be viewd in the jwt helper
 
       if (userRole !== "admin") {
@@ -31,7 +31,7 @@ module.exports = {
     try {
       const validatedUpdate = await userValidation.edit.validateAsync(req.body);
 
-      const tokenPayload = await jwt.getTokenPayload(req);
+      const tokenPayload = req.payload;
       const requesterUserId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
       const requesterIsAdmin = tokenPayload.role; // aud = user id, can be viewd in the jwt helper
       const userIdToEdit = req.params.userId;
@@ -79,7 +79,7 @@ module.exports = {
 
   delete: async (req, res, next) => {
     try {
-      const tokenPayload = await jwt.getTokenPayload(req);
+      const tokenPayload = req.payload;
       const requesterUserId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
       const requesterIsAdmin = tokenPayload.role; // aud = user id, can be viewd in the jwt helper
       const userIdToDelete = req.params.userId;
@@ -123,7 +123,7 @@ module.exports = {
 
   setMainVault: async (req, res, next) => {
     try {
-      const tokenPayload = await jwt.getTokenPayload(req);
+      const tokenPayload = req.payload;
       const requesterUserId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
       const userIdToSetMainVault = req.params.userId;
       const vaultId = req.params.vaultId;
