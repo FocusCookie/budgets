@@ -1,14 +1,13 @@
 const debug = require("debug")("dev:vaults");
 const createError = require("http-errors");
 const vaultsValidation = require("../helpers/validations/vaults.validation");
-const jwt = require("../helpers/jwt.helper");
 const Vault = require("../models/vault.model");
 var ObjectId = require("mongoose").Types.ObjectId;
 
 module.exports = {
   getVaults: async (req, res) => {
     try {
-      const tokenPayload = await jwt.getTokenPayload(req);
+      const tokenPayload = req.payload;
       const userId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
 
       const searchQuery = {
@@ -26,7 +25,7 @@ module.exports = {
 
   createVault: async (req, res, next) => {
     try {
-      const tokenPayload = await jwt.getTokenPayload(req);
+      const tokenPayload = req.payload;
 
       const validVault = await vaultsValidation.create.validateAsync(req.body);
 
@@ -118,7 +117,7 @@ module.exports = {
   shareVaultWith: async (req, res, next) => {
     try {
       const vaultId = req.params.id;
-      const tokenPayload = await jwt.getTokenPayload(req);
+      const tokenPayload = req.payload;
       const ownerId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
       const userId = req.params.userId;
 
@@ -160,7 +159,7 @@ module.exports = {
   revokeSharing: async (req, res, next) => {
     try {
       const vaultId = req.params.id;
-      const tokenPayload = await jwt.getTokenPayload(req);
+      const tokenPayload = req.payload;
       const ownerId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
       const userId = req.params.userId;
 

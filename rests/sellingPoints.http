@@ -1,0 +1,24 @@
+### GET ALL CREATE SELLING POINTS
+GET http://localhost:3000/sellingpoints
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJtYWluVmF1bHQiOiI1ZmQ4Y2ZiMDcwNDc4ZjI2Y2QwMjQ3NGEiLCJpYXQiOjE2MDgwNjA0MzIsImV4cCI6MTYwODA2NzYzMiwiYXVkIjoiNWZkOGM5MmUxZDQyNjIyNDJkZDY0MWMzIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.-lqln7VAmWxXUSQljCqkRI7_q8_qdsTSoLgVkY1DAco
+
+### CREATE SELLING POINT
+POST http://localhost:3000/sellingpoints
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJtYWluVmF1bHQiOiI1ZmQ4Y2ZiMDcwNDc4ZjI2Y2QwMjQ3NGEiLCJpYXQiOjE2MDgwNjA0MzIsImV4cCI6MTYwODA2NzYzMiwiYXVkIjoiNWZkOGM5MmUxZDQyNjIyNDJkZDY0MWMzIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.-lqln7VAmWxXUSQljCqkRI7_q8_qdsTSoLgVkY1DAco
+Content-Type: application/json
+
+{
+    "name":"Alnatura",
+    "initials": "AN",
+    "category": "foodGroceries"
+}
+
+
+### EDIT CREATE SELLING POINT
+PUT http://localhost:3000/sellingpoints/123
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJtYWluVmF1bHQiOiI1ZmQ4Y2ZiMDcwNDc4ZjI2Y2QwMjQ3NGEiLCJpYXQiOjE2MDgwNjA0MzIsImV4cCI6MTYwODA2NzYzMiwiYXVkIjoiNWZkOGM5MmUxZDQyNjIyNDJkZDY0MWMzIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.-lqln7VAmWxXUSQljCqkRI7_q8_qdsTSoLgVkY1DAco
+
+
+### DELETE CREATE SELLING POINT
+DELETE http://localhost:3000/sellingpoints/123
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJtYWluVmF1bHQiOiI1ZmQ4Y2ZiMDcwNDc4ZjI2Y2QwMjQ3NGEiLCJpYXQiOjE2MDgwNjA0MzIsImV4cCI6MTYwODA2NzYzMiwiYXVkIjoiNWZkOGM5MmUxZDQyNjIyNDJkZDY0MWMzIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.-lqln7VAmWxXUSQljCqkRI7_q8_qdsTSoLgVkY1DAco

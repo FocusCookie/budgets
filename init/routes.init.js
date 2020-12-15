@@ -3,6 +3,7 @@ const expenses = require("../routes/expenses.route");
 const auth = require("../routes/auth.route");
 const vaults = require("../routes/vaults.route");
 const categories = require("../routes/categories.route");
+const sellingPoints = require("../routes/sellingPoints.route");
 const debug = require("debug")("app:init-routes");
 const createError = require("http-errors");
 
@@ -12,6 +13,7 @@ module.exports = (app) => {
   app.use("/users", users);
   app.use("/categories", categories);
   app.use("/expenses", expenses);
+  app.use("/sellingpoints", sellingPoints);
 
   app.get("/", (req, res) => {
     res.send("This is the Budgets App.");

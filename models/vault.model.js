@@ -15,6 +15,9 @@ const VaultSchema = new Schema({
     required: true,
   },
   shared: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  sellingPoints: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "SellingPoints" },
+  ],
 });
 
 const Vault = mongoose.model("Vault", VaultSchema);
