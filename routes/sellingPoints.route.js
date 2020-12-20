@@ -3,16 +3,15 @@ const router = express.Router();
 const SellingPointsController = require("../controllers/sellingPoints.controller");
 const { verfiyAccessToken } = require("../helpers/jwt.helper");
 
-// Vaults
 router.get(
   "/",
   verfiyAccessToken,
   SellingPointsController.getAllMyOwnSellingPoints
 );
 router.get(
-  "/vault/:vaultId",
+  "/:id",
   verfiyAccessToken,
-  SellingPointsController.getAllMyOwnSellingPoints
+  SellingPointsController.getSellingPointById
 );
 router.post("/", verfiyAccessToken, SellingPointsController.create);
 router.put("/:id", verfiyAccessToken, SellingPointsController.edit);

@@ -21,7 +21,7 @@ const SellingPointSchema = new Schema({
     type: String,
     required: true,
   },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 const SellingPoint = mongoose.model("SellingPoint", SellingPointSchema);

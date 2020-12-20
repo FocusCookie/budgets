@@ -69,6 +69,11 @@ module.exports = {
         req.body
       );
 
+      // check if the given id is valid
+      if (!ObjectId.isValid(vaultId)) {
+        throw createError.Conflict(`Invalid ID ${vaultId}.`);
+      }
+
       // look up for the vault
       const vault = await Vault.findOneAndUpdate(
         { _id: vaultId },
@@ -96,6 +101,11 @@ module.exports = {
     try {
       const vaultId = req.params.id;
 
+      // check if the given id is valid
+      if (!ObjectId.isValid(vaultId)) {
+        throw createError.Conflict(`Invalid ID ${vaultId}.`);
+      }
+
       const deleted = await Vault.deleteOne({ _id: vaultId });
 
       if (!deleted || (deleted.n === 0 && deleted.ok === 1)) {
@@ -120,6 +130,11 @@ module.exports = {
       const tokenPayload = req.payload;
       const ownerId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
       const userId = req.params.userId;
+
+      // check if the given id is valid
+      if (!ObjectId.isValid(vaultId)) {
+        throw createError.Conflict(`Invalid ID ${vaultId}.`);
+      }
 
       const vault = await Vault.findOne({ _id: vaultId });
 
@@ -162,6 +177,11 @@ module.exports = {
       const tokenPayload = req.payload;
       const ownerId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
       const userId = req.params.userId;
+
+      // check if the given id is valid
+      if (!ObjectId.isValid(vaultId)) {
+        throw createError.Conflict(`Invalid ID ${vaultId}.`);
+      }
 
       const vault = await Vault.findOne({ _id: vaultId });
 

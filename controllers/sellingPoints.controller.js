@@ -4,6 +4,7 @@ const sellingPointsValidation = require("../helpers/validations/sellingPoints.va
 const categories = require("../helpers/categories.helper");
 const SellingPoint = require("../models/sellingPoint.model");
 const User = require("../models/user.model");
+const Vault = require("../models/vault.model");
 var ObjectId = require("mongoose").Types.ObjectId;
 
 module.exports = {
@@ -11,22 +12,52 @@ module.exports = {
     try {
       const userId = req.payload.aud;
 
-      const userExists = await User.find({ _id: userId });
+      const userExists = await User.findOne({ _id: userId });
 
       if (!userExists) {
         throw createError.Conflict(`User with ID ${userId} doensn't exist.`);
       }
 
-      const sellingPoints = SellingPoint.find({
-        createdBy: new ObjectId(userId),
-      });
+      const sellingPoints = await SellingPoint.find({
+        owner: userId,
+      }).select("-owner");
 
-      // if no selling point is ever created mongoose will return the model object and that should not be send to the user
-      if (Array.isArray(sellingPoints)) {
-        res.send(sellingPoints);
-      } else {
-        res.send([]);
+      res.send(sellingPoints);
+    } catch (error) {
+      debug(error.message);
+      next(error);
+    }
+  },
+
+  getSellingPointById: async (req, res, next) => {
+    try {
+      // check if the requester user exists
+      const userId = req.payload.aud;
+      const userExists = await User.findOne({ _id: userId });
+
+      if (!userExists) {
+        throw createError.Conflict(`User with ID ${userId} doensn't exist.`);
       }
+
+      const sellingPointId = req.params.id;
+
+      // check if the given id is valid
+      if (!ObjectId.isValid(sellingPointId)) {
+        throw createError.Conflict(`Invalid ID ${sellingPointId}.`);
+      }
+
+      // check the selling Point exists
+      const sellingPoint = await SellingPoint.findOne({
+        _id: sellingPointId,
+      }).select("-createdBy");
+
+      if (!sellingPoint) {
+        throw createError.Conflict(
+          `Selling Point with ID ${sellingPointId} doesn't exist.`
+        );
+      }
+
+      res.send(sellingPoint);
     } catch (error) {
       debug(error.message);
       next(error);
@@ -36,6 +67,14 @@ module.exports = {
   create: async (req, res, next) => {
     try {
       const userId = req.payload.aud;
+
+      // check if the requester user exists
+      const userExists = await User.findOne({ _id: userId });
+
+      if (!userExists) {
+        throw createError.Conflict(`User with ID ${userId} doensn't exist.`);
+      }
+
       const validSellingPoint = await sellingPointsValidation.create.validateAsync(
         req.body
       );
@@ -51,7 +90,7 @@ module.exports = {
         );
 
       // add owner property with the user id from the request
-      validSellingPoint.createdBy = new ObjectId(userId);
+      validSellingPoint.owner = new ObjectId(userId);
 
       const sellingPoint = new SellingPoint(validSellingPoint);
       const savedSellingPoint = await sellingPoint.save();
@@ -64,10 +103,102 @@ module.exports = {
       next(error);
     }
   },
+
   edit: async (req, res, next) => {
-    res.send(`edit SELLING POINTS ${req.params.id}`);
+    try {
+      const sellingPointId = req.params.id;
+      const userId = req.payload.aud;
+
+      // check if the requester user exists
+      const userExists = await User.findOne({ _id: userId });
+
+      if (!userExists) {
+        throw createError.Conflict(`User with ID ${userId} doensn't exist.`);
+      }
+
+      const update = await sellingPointsValidation.edit.validateAsync(req.body);
+
+      // check if category exists
+      if (!categories[update.category])
+        throw createError.Conflict(
+          `The category ${update.category} is not allowed.`
+        );
+
+      // check if the given id is valid
+      if (!ObjectId.isValid(sellingPointId)) {
+        throw createError.Conflict(`Invalid ID ${sellingPointId}.`);
+      }
+
+      // check the selling Point exists
+      const sellingPoint = await SellingPoint.findOne({
+        _id: sellingPointId,
+      });
+
+      if (!sellingPoint) {
+        throw createError.Conflict(
+          `Selling Point with ID ${sellingPointId} doensn't exist.`
+        );
+      }
+
+      // check if the requester is the owner of the selling point
+      if (sellingPoint.owner.toString() !== userId) {
+        throw createError.Unauthorized(
+          "You are not the owner of the selling point"
+        );
+      } else {
+        // update the selling point
+        await SellingPoint.findOneAndUpdate({ _id: sellingPointId }, update);
+
+        const updatedSellingPoint = await SellingPoint.findOne({
+          _id: sellingPointId,
+        });
+
+        res.send(updatedSellingPoint);
+      }
+    } catch (error) {
+      debug(error.message);
+      next(error);
+    }
   },
+
   delete: async (req, res, next) => {
-    res.send(`delete SELLING POINTS ${req.params.id}`);
+    try {
+      const sellingPointId = req.params.id;
+      const userId = req.payload.aud;
+
+      // check if the requester user exists
+      const userExists = await User.findOne({ _id: userId });
+
+      if (!userExists) {
+        throw createError.Conflict(`User with ID ${userId} doensn't exist.`);
+      }
+
+      // check if the given id is valid
+      if (!ObjectId.isValid(sellingPointId)) {
+        throw createError.Conflict(`Invalid ID ${sellingPointId}.`);
+      }
+
+      // check if the requester is the owner of the selling point
+      if (sellingPoint.owner.toString() !== userId) {
+        throw createError.Unauthorized(
+          "You are not the owner of the selling point"
+        );
+      } else {
+        const deleted = await SellingPoint.deleteOne({ _id: sellingPointId });
+
+        if (!deleted || (deleted.n === 0 && deleted.ok === 1)) {
+          throw createError.Conflict(
+            `Could not find a selling point with ID: ${vaultId}.`
+          );
+        }
+
+        res.send(deleted);
+      }
+    } catch (error) {
+      if (error.isJoi === true) error.status = 422;
+
+      debug(error.message);
+      next(error);
+    }
   },
 };
