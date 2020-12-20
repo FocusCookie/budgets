@@ -1,0 +1,31 @@
+### CREATE EXPSENSE
+POST http://localhost:3000/expenses
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJtYWluVmF1bHQiOiI1ZmQ5MGMzMGYxNGY3NzA3OGQ1YzgyNGUiLCJpYXQiOjE2MDg0ODE5OTMsImV4cCI6MTYwODQ4OTE5MywiYXVkIjoiNWZkOGM5MmUxZDQyNjIyNDJkZDY0MWMzIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.MalRxFqfjKNpwRKk2UwnYDxk5KlPGlgUOG7ZIIsnNOQ
+Content-Type: application/json
+
+{
+    "sum": 9.99,
+    "type": "spontaneous",
+    "sellingPoint": "5fdf57ed091a890872fed9a5",
+    "vault": "5fdf7cdae13ef3102e764ec9"
+}
+
+
+### EDIT EXPSENSE
+PUT http://localhost:3000/expenses/5fdf8ae20909db156f52b82c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJtYWluVmF1bHQiOiI1ZmQ5MGMzMGYxNGY3NzA3OGQ1YzgyNGUiLCJpYXQiOjE2MDg0ODE5OTMsImV4cCI6MTYwODQ4OTE5MywiYXVkIjoiNWZkOGM5MmUxZDQyNjIyNDJkZDY0MWMzIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.MalRxFqfjKNpwRKk2UwnYDxk5KlPGlgUOG7ZIIsnNOQ
+Content-Type: application/json
+
+{
+    "sum": 10,
+    "type": "monthly",
+    "sellingPoint": "5fdf571336b31807d75f029a"
+}
+
+### DELETE EXPSENSE
+DELETE http://localhost:3000/expenses/5fdf8d298781021694ac1e81
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJtYWluVmF1bHQiOiI1ZmQ5MGMzMGYxNGY3NzA3OGQ1YzgyNGUiLCJpYXQiOjE2MDg0ODE5OTMsImV4cCI6MTYwODQ4OTE5MywiYXVkIjoiNWZkOGM5MmUxZDQyNjIyNDJkZDY0MWMzIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.MalRxFqfjKNpwRKk2UwnYDxk5KlPGlgUOG7ZIIsnNOQ
+
+### GET EXPENSES BY VAULT
+GET http://localhost:3000/expenses/vault/5fdf7cdae13ef3102e764ec9?from=6-1-2020&to=11-20-2020
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJtYWluVmF1bHQiOiI1ZmQ5MGMzMGYxNGY3NzA3OGQ1YzgyNGUiLCJpYXQiOjE2MDg0ODkyNjUsImV4cCI6MTYwODQ5NjQ2NSwiYXVkIjoiNWZkOGM5MmUxZDQyNjIyNDJkZDY0MWMzIiwiaXNzIjoiYnVkZ2V0cy5pbyJ9.JDAwS7tcWdGIQRytZIklYGSfJGPgVnQikWCYV1nk5c4

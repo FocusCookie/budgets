@@ -3,6 +3,20 @@ const router = express.Router();
 const { verfiyAccessToken } = require("../helpers/jwt.helper");
 const ExspensesController = require("../controllers/expenses.controller");
 
-router.get("/", verfiyAccessToken, ExspensesController.root);
+// create exspense
+router.post("/", verfiyAccessToken, ExspensesController.create);
+
+// put exspense
+router.put("/:expenseId", verfiyAccessToken, ExspensesController.edit);
+
+// delete expense by id
+router.delete("/:expenseId", verfiyAccessToken, ExspensesController.delete);
+
+// get all expsenses for a vault PARAMTER BODY filters via searchParameters -> req.query array
+router.get(
+  "/vault/:vaultId/",
+  verfiyAccessToken,
+  ExspensesController.getVaultExpenses
+);
 
 module.exports = router;
