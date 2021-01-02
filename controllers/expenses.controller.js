@@ -54,11 +54,19 @@ module.exports = {
         );
       }
 
-      // store sellingPoint in vault
-      await Vault.update(
-        { _id: vault },
-        { $push: { sellingPoints: new ObjectId(sellingPoint) } }
-      );
+      // check if selling point is already attached to the vault
+      const sellingPointExistInVault = vaultExists.sellingPoints
+        .map((el) => el.toString())
+        .includes(sellingPoint);
+
+      // if the sellingPoint is not attached to the vault attach it
+      if (!sellingPointExistInVault) {
+        // store sellingPoint in vault
+        await Vault.update(
+          { _id: vault },
+          { $push: { sellingPoints: new ObjectId(sellingPoint) } }
+        );
+      }
 
       // convert the id strings into mongoose Object ids
       validatedExpense.vault = vaultExists._id;
