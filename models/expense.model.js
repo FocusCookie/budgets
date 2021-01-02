@@ -32,8 +32,8 @@ const ExpenseSchema = new Schema({
     ref: "SellingPoints",
     required: true,
   },
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comments" }],
-  images: [{ type: mongoose.Schema.Types.ObjectId, ref: "Images" }],
+  // comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comments" }],
+  // images: [{ type: mongoose.Schema.Types.ObjectId, ref: "Images" }],
 });
 
 const Expense = mongoose.model("Expense", ExpenseSchema);
