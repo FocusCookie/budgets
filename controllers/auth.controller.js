@@ -47,12 +47,21 @@ module.exports = {
 
       if (!user) throw createError.NotFound("User not registered.");
 
+      const validPassword = await user.isValidPassword(validatedUser.password);
+
+      if (!validPassword)
+        throw createError.Unauthorized("Invalid Email/Password.");
+
       const accessToken = await signAccessToken(user);
       const refreshToken = await signRefreshToken(user);
 
       res.send({ accessToken, refreshToken });
     } catch (error) {
       debug(error.message);
+
+      if (error.isJoi)
+        return next(createError.BadRequest("Invalid Email/Password."));
+
       next(error);
     }
   },

@@ -114,7 +114,7 @@ module.exports = {
         );
       }
 
-      res.send(deleted);
+      res.status(204).send();
     } catch (error) {
       if (error.isJoi === true) error.status = 422;
 
@@ -160,7 +160,7 @@ module.exports = {
             { $push: { shared: new ObjectId(userId) } }
           );
 
-          res.send(updated);
+          res.status(204).send();
         }
       } else {
         next(createError.Unauthorized());
@@ -198,7 +198,7 @@ module.exports = {
             { $pull: { shared: new ObjectId(userId) } }
           );
 
-          res.send(updated);
+          res.status(204).send();
         } else {
           res.send(
             createError.Conflict(

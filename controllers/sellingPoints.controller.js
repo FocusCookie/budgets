@@ -178,6 +178,17 @@ module.exports = {
         throw createError.Conflict(`Invalid ID ${sellingPointId}.`);
       }
 
+      // check the selling Point exists
+      const sellingPoint = await SellingPoint.findOne({
+        _id: sellingPointId,
+      });
+
+      if (!sellingPoint) {
+        throw createError.Conflict(
+          `Selling Point with ID ${sellingPointId} doensn't exist.`
+        );
+      }
+
       // check if the requester is the owner of the selling point
       if (sellingPoint.owner.toString() !== userId) {
         throw createError.Unauthorized(
@@ -192,7 +203,7 @@ module.exports = {
           );
         }
 
-        res.send(deleted);
+        res.status(204).send();
       }
     } catch (error) {
       if (error.isJoi === true) error.status = 422;

@@ -118,7 +118,7 @@ module.exports = {
         );
 
       // check that every given id is a valid ObjectId
-      if (!ObjectId.isValid(sellingPoint)) {
+      if (sellingPoint && !ObjectId.isValid(sellingPoint)) {
         throw createError.Conflict(`Invalid selling point or vault ID.`);
       }
 
@@ -226,7 +226,7 @@ module.exports = {
         );
       }
 
-      res.send(deleted);
+      res.status(204).send();
     } catch (error) {
       if (error.isJoi === true) error.status = 422;
 

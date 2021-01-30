@@ -111,7 +111,7 @@ module.exports = {
 
           User.deleteOne({ _id: userIdToDelete }).then(() => {
             debug(`User with ID ${userIdToDelete} was successfull deleted`);
-            res.send(`User with ID ${userIdToDelete} was successfull deleted`);
+            res.status(204).send();
           });
         }
       });
@@ -156,6 +156,8 @@ module.exports = {
         { _id: userIdToSetMainVault },
         { mainVault: new ObjectId(vaultId) }
       );
+
+      //TODO: Return the vault name? or the id?
 
       res.send(updatedUser);
     } catch (error) {
