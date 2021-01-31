@@ -90,7 +90,7 @@ module.exports = {
     }
   },
 
-  refreshToken: async (req, res, next) => {
+  refreshTokens: async (req, res, next) => {
     try {
       const { refreshToken } = req.body;
 
@@ -98,6 +98,7 @@ module.exports = {
 
       const userId = await verifyRefreshToken(refreshToken);
 
+      // delete old refresh token
       redisClient.DEL(userId, (err, value) => {
         if (err) {
           debug(err.message);
@@ -108,9 +109,11 @@ module.exports = {
       });
 
       const user = await User.findOne({ _id: userId });
+
+      const newAccessToken = await signAccessToken(user);
       const newRefreshToken = await signRefreshToken(user);
 
-      res.send({ refreshToken: newRefreshToken });
+      res.send({ accessToken: newAccessToken, refreshToken: newRefreshToken });
     } catch (error) {
       debug(error.message);
       next(error);
