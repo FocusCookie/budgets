@@ -2,6 +2,7 @@ const debug = require("debug")("dev:vaults");
 const createError = require("http-errors");
 const vaultsValidation = require("../helpers/validations/vaults.validation");
 const Vault = require("../models/vault.model");
+const User = require("../models/user.model");
 var ObjectId = require("mongoose").Types.ObjectId;
 
 module.exports = {
@@ -136,8 +137,10 @@ module.exports = {
         throw createError.Conflict(`Invalid ID ${vaultId}.`);
       }
 
-      const vault = await Vault.findOne({ _id: vaultId });
+      const user = await User.findOne({ _id: userId });
+      if (!user) throw createError.Conflict(`User not exists with ${userId}.`);
 
+      const vault = await Vault.findOne({ _id: vaultId });
       if (!vault)
         res.send(createError.Conflict(`No vault found with ID: ${vaultId}`));
 

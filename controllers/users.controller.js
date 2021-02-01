@@ -165,4 +165,24 @@ module.exports = {
       next(error);
     }
   },
+
+  getUserIdByMail: async (req, res, next) => {
+    try {
+      const userMail = req.params.email;
+
+      debug("PARA ", req.params);
+
+      const user = await User.findOne({ email: userMail });
+
+      if (!user)
+        throw createError.Conflict(
+          `User with e-mail: ${userMail} could not be found.`
+        );
+
+      res.send(user._id.toString());
+    } catch (error) {
+      debug(error.message);
+      next(error);
+    }
+  },
 };
