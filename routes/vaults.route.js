@@ -5,6 +5,7 @@ const { verfiyAccessToken } = require("../helpers/jwt.helper");
 
 // Vaults
 router.get("/", verfiyAccessToken, VaultsController.getVaults);
+router.get("/:id", verfiyAccessToken, VaultsController.get);
 router.post("/", verfiyAccessToken, VaultsController.createVault);
 router.put("/:id", verfiyAccessToken, VaultsController.editVault);
 router.delete("/:id", verfiyAccessToken, VaultsController.deleteVault);

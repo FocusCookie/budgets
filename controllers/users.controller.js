@@ -152,14 +152,12 @@ module.exports = {
         throw createError.Unauthorized();
       }
 
-      const updatedUser = await User.update(
+      await User.update(
         { _id: userIdToSetMainVault },
         { mainVault: new ObjectId(vaultId) }
       );
 
-      //TODO: Return the vault name? or the id?
-
-      res.send(updatedUser);
+      res.status(204).send();
     } catch (error) {
       debug(error.message);
       next(error);

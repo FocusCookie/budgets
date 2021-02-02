@@ -6,7 +6,7 @@ const User = require("../models/user.model");
 var ObjectId = require("mongoose").Types.ObjectId;
 
 module.exports = {
-  getVaults: async (req, res) => {
+  getVaults: async (req, res, next) => {
     try {
       const tokenPayload = req.payload;
       const userId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
@@ -18,6 +18,40 @@ module.exports = {
       const vaults = await Vault.find(searchQuery);
 
       res.send(vaults);
+    } catch (error) {
+      debug(error.message);
+      next(error);
+    }
+  },
+
+  get: async (req, res, next) => {
+    try {
+      const tokenPayload = req.payload;
+      const userId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
+      const vaultId = req.params.id;
+
+      // check if the given id is valid
+      if (!ObjectId.isValid(vaultId)) {
+        throw createError.Conflict(`Invalid ID ${vaultId}.`);
+      }
+
+      const vault = await Vault.findOne({ _id: vaultId });
+      if (!vault) {
+        throw createError.Conflict(
+          `Could not find a vault with ID: ${vaultId}.`
+        );
+      }
+
+      const isSharedWithUser = vault.shared.some(
+        (id) => id.toString() === userId
+      );
+      const isOwnerOfTheVault = vault.owner.toString() === userId;
+
+      if (isSharedWithUser || isOwnerOfTheVault) {
+        res.send(vault);
+      } else {
+        next(createError.Unauthorized());
+      }
     } catch (error) {
       debug(error.message);
       next(error);
