@@ -10,6 +10,7 @@ module.exports = {
         name: user.name,
         role: user.role,
         mainVault: user.mainVault,
+        email: user.email,
       };
       const secret = process.env.ACCESS_TOKEN_SECRET;
       const options = {
