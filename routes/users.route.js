@@ -4,7 +4,6 @@ const UsersController = require("../controllers/users.controller");
 const { verfiyAccessToken } = require("../helpers/jwt.helper");
 
 router.get("/", verfiyAccessToken, UsersController.getAllUsers);
-router.get("/email/:email", verfiyAccessToken, UsersController.getUserIdByMail);
 router.put("/:userId", verfiyAccessToken, UsersController.edit);
 router.delete("/:userId", verfiyAccessToken, UsersController.delete);
 router.post(

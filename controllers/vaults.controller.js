@@ -130,38 +130,34 @@ module.exports = {
       const vaultId = req.params.id;
       const tokenPayload = req.payload;
       const ownerId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
-      const userId = req.params.userId;
+      const userEmail = req.body.email;
 
       // check if the given id is valid
       if (!ObjectId.isValid(vaultId)) {
         throw createError.Conflict(`Invalid ID ${vaultId}.`);
       }
 
-      const user = await User.findOne({ _id: userId });
-      if (!user) throw createError.Conflict(`User not exists with ${userId}.`);
+      const user = await User.findOne({ email: userEmail });
+      if (!user)
+        throw createError.Conflict(`Couldn't find a user with ${userEmail}.`);
 
       const vault = await Vault.findOne({ _id: vaultId });
       if (!vault)
-        res.send(createError.Conflict(`No vault found with ID: ${vaultId}`));
+        throw createError.Conflict(`No vault found with ID: ${vaultId}`);
 
       if (vault.owner.toString() === ownerId) {
         //check if user is not already in shared listed
         if (
-          vault.shared
-            .map((userObj) => userObj.toString())
-            .some((user) => user === userId)
+          vault.shared.some(
+            (userId) => userId.toString() === user._id.toString()
+          )
         ) {
-          res.send(
-            createError.Conflict(
-              `The Vault is already shared with UserId: ${userId}`
-            )
+          throw createError.Conflict(
+            `The Vault is already shared with UserId: ${userEmail}`
           );
         } else {
           // add user to shared
-          const updated = await Vault.update(
-            { _id: vaultId },
-            { $push: { shared: new ObjectId(userId) } }
-          );
+          await Vault.update({ _id: vaultId }, { $push: { shared: user._id } });
 
           res.status(204).send();
         }
@@ -179,34 +175,35 @@ module.exports = {
       const vaultId = req.params.id;
       const tokenPayload = req.payload;
       const ownerId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
-      const userId = req.params.userId;
+      const userEmail = req.body.email;
 
       // check if the given id is valid
       if (!ObjectId.isValid(vaultId)) {
         throw createError.Conflict(`Invalid ID ${vaultId}.`);
       }
 
+      const user = await User.findOne({ email: userEmail });
+      if (!user)
+        throw createError.Conflict(`The Vault is not shared with ${userEmail}`);
+
       const vault = await Vault.findOne({ _id: vaultId });
+      if (!vault)
+        throw createError.Conflict(`No vault found with ID: ${vaultId}`);
 
       if (vault.owner.toString() === ownerId) {
         //check if user is not already in shared listed
         if (
-          vault.shared
-            .map((userObj) => userObj.toString())
-            .some((user) => user === userId)
+          vault.shared.some(
+            (userId) => userId.toString() === user._id.toString()
+          )
         ) {
           // remove user from shared
-          const updated = await Vault.update(
-            { _id: vaultId },
-            { $pull: { shared: new ObjectId(userId) } }
-          );
+          await Vault.update({ _id: vaultId }, { $pull: { shared: user._id } });
 
           res.status(204).send();
         } else {
-          res.send(
-            createError.Conflict(
-              `The Vault is not shared with UserId: ${userId}`
-            )
+          throw createError.Conflict(
+            `The Vault is not shared with ${userEmail}`
           );
         }
       } else {
