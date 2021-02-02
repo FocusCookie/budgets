@@ -248,4 +248,42 @@ module.exports = {
       next(error);
     }
   },
+
+  getVaultShare: async (req, res, next) => {
+    try {
+      const vaultId = req.params.id;
+      const userId = req.payload.aud; // aud = user id, can be viewd in the jwt helper
+
+      // check if the given id is valid
+      if (!ObjectId.isValid(vaultId)) {
+        throw createError.Conflict(`Invalid ID ${vaultId}.`);
+      }
+
+      const vault = await Vault.findOne({ _id: vaultId });
+      if (!vault)
+        throw createError.Conflict(`No vault found with ID: ${vaultId}`);
+
+      const isSharedWithUser = vault.shared.some(
+        (user) => user.toString() === userId
+      );
+
+      const isOwner = vault.owner.toString() === userId;
+
+      if (isSharedWithUser || isOwner) {
+        const users = await User.find(
+          { _id: vault.shared },
+          { password: 0, __v: 0, role: 0 }
+        );
+
+        console.log(users);
+
+        res.send(users);
+      } else {
+        next(createError.Unauthorized());
+      }
+    } catch (error) {
+      debug(error.message);
+      next(error);
+    }
+  },
 };

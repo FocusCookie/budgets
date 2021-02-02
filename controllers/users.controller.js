@@ -34,18 +34,16 @@ module.exports = {
       const tokenPayload = req.payload;
       const requesterUserId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
       const requesterIsAdmin = tokenPayload.role; // aud = user id, can be viewd in the jwt helper
-      const userIdToEdit = req.params.userId;
+      const userId = req.params.userId;
 
-      const userToEditExist = await User.findOne({ _id: userIdToEdit });
+      const user = await User.findOne({ _id: userId });
 
-      if (!userToEditExist) {
-        throw createError.Conflict(
-          `User with ID ${userIdToEdit} doesn't exists.`
-        );
+      if (!user) {
+        throw createError.Conflict(`User with ID ${userId} doesn't exists.`);
       }
 
       if (
-        userToEditExist._id.toString() !== requesterUserId &&
+        user._id.toString() !== requesterUserId &&
         requesterIsAdmin !== "admin"
       ) {
         throw createError.Unauthorized();
@@ -63,10 +61,7 @@ module.exports = {
         validatedUpdate.password = hashedPassword;
       }
 
-      const updatedUser = await User.update(
-        { _id: userIdToEdit },
-        validatedUpdate
-      );
+      const updatedUser = await User.update({ _id: userId }, validatedUpdate);
 
       res.send(updatedUser);
     } catch (error) {
@@ -125,35 +120,38 @@ module.exports = {
     try {
       const tokenPayload = req.payload;
       const requesterUserId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
-      const userIdToSetMainVault = req.params.userId;
+      const userId = req.params.userId;
       const vaultId = req.params.vaultId;
 
       // check if vault exists
-      const vaultExists = await Vault.findOne({ _id: vaultId });
+      const vault = await Vault.findOne({ _id: vaultId });
 
-      if (!vaultExists) {
+      if (!vault) {
         throw createError.Conflict(`Vault with ID ${vaultId} doesn't exists.`);
       }
 
-      const userExists = await User.findOne({ _id: userIdToSetMainVault });
+      const user = await User.findOne({ _id: userId });
+      if (!user) {
+        throw createError.Conflict(`User with ID ${userId} doesn't exists.`);
+      }
 
       // check if requester is the user of the vault or the vault has been shared with the user
-      const vaultOwner = vaultExists.owner.toString();
-      const vaultShared = vaultExists.shared.map((share) => share.toString());
+      const vaultOwner = vault.owner.toString();
+      const vaultShared = vault.shared.map((share) => share.toString());
 
       debug("requester ", requesterUserId);
-      debug("owner of vault ", vaultExists.owner.toString());
+      debug("owner of vault ", vault.owner.toString());
 
       if (
-        userExists._id.toString() !== requesterUserId ||
+        user._id.toString() !== requesterUserId ||
         (vaultOwner !== requesterUserId &&
           !vaultShared.some((share) => share === requesterUserId))
       ) {
         throw createError.Unauthorized();
       }
 
-      await User.update(
-        { _id: userIdToSetMainVault },
+      await User.updateOne(
+        { _id: userId },
         { mainVault: new ObjectId(vaultId) }
       );
 

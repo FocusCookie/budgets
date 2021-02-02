@@ -11,6 +11,7 @@ router.put("/:id", verfiyAccessToken, VaultsController.editVault);
 router.delete("/:id", verfiyAccessToken, VaultsController.deleteVault);
 
 // Vault Sharing
+router.get("/:id/share", verfiyAccessToken, VaultsController.getVaultShare);
 router.post("/:id/share", verfiyAccessToken, VaultsController.shareVaultWith);
 router.delete("/:id/share", verfiyAccessToken, VaultsController.revokeSharing);
 
