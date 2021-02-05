@@ -15,7 +15,7 @@ module.exports = {
         $or: [{ owner: userId }, { shared: userId }],
       };
 
-      const vaults = await Vault.find(searchQuery);
+      let vaults = await Vault.find(searchQuery, { __v: 0 });
 
       res.send(vaults);
     } catch (error) {
@@ -35,7 +35,7 @@ module.exports = {
         throw createError.Conflict(`Invalid ID ${vaultId}.`);
       }
 
-      const vault = await Vault.findOne({ _id: vaultId });
+      let vault = await Vault.findOne({ _id: vaultId }, { __V: 0 });
       if (!vault) {
         throw createError.Conflict(
           `Could not find a vault with ID: ${vaultId}.`
@@ -46,6 +46,20 @@ module.exports = {
         (id) => id.toString() === userId
       );
       const isOwnerOfTheVault = vault.owner.toString() === userId;
+
+      const sharedUsers = await User.find(
+        { _id: vault.shared },
+        { password: 0, __v: 0, role: 0 }
+      );
+
+      const owner = await User.findOne(
+        { _id: vault.owner },
+        { password: 0, __v: 0, role: 0, mainVault: 0 }
+      );
+
+      // replace ID with user objects
+      vault.owner = owner;
+      vault.shared = sharedUsers;
 
       if (isSharedWithUser || isOwnerOfTheVault) {
         res.send(vault);
