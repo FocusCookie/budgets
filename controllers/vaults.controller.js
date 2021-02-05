@@ -17,6 +17,20 @@ module.exports = {
 
       let vaults = await Vault.find(searchQuery, { __v: 0 });
 
+      // get owner names
+      const vaultsOwnersNamesPromises = vaults.map((vault) => {
+        return User.findOne(
+          { _id: vault.owner },
+          { password: 0, role: 0, __v: 0, mainVault: 0 }
+        );
+      });
+
+      const vaultsOwners = await Promise.all(vaultsOwnersNamesPromises);
+
+      vaultsOwners.forEach((owner, index) => {
+        vaults[index].owner = owner;
+      });
+
       res.send(vaults);
     } catch (error) {
       debug(error.message);
