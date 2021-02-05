@@ -72,12 +72,6 @@ module.exports = {
       validatedExpense.vault = vaultExists._id;
       validatedExpense.sellingPoint = sellingPointExists._id;
 
-      // convert sum into string and hash it
-      const salt = await bcrypt.genSalt(10);
-      const roundedSumAsString = Math.round(sum.toFixed(2)).toString();
-      const hashedSum = await bcrypt.hash(roundedSumAsString, salt);
-      validatedExpense.sum = hashedSum;
-
       // add owner of the Expense
       validatedExpense.owner = new ObjectId(userId);
 
