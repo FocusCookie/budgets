@@ -7,6 +7,7 @@ const Expense = require("../models/expense.model");
 const expensesValidation = require("../helpers/validations/expenses.validation");
 const bcrypt = require("bcrypt");
 var ObjectId = require("mongoose").Types.ObjectId;
+const moment = require("moment");
 
 module.exports = {
   create: async (req, res, next) => {
@@ -249,15 +250,11 @@ module.exports = {
       if (!userIsVaultOwner && !vaultIsSharedWithUser)
         throw createError.Unauthorized();
 
-      debug(from, to);
-
       // if from and to is given return expenses within this time frame if not return the last 31 days
       let expenses;
       const today = new Date();
 
       //TODO: validate from and  to as valid dates to is toDate 0:0:0 am that means that every expense within the to day is not show. Increase the to date by 1 day
-
-      debug(to.toString());
 
       const toDate = to
         ? to
@@ -289,6 +286,41 @@ module.exports = {
           { $match: { month: month, year: year } },
         ]);
       }
+
+      res.send(expenses);
+    }
+  },
+
+  getCurrentMonth: async (req, res) => {
+    // check if vault exists
+    const vaultId = req.params.vaultId;
+    const today = moment(new Date());
+    const userId = req.payload.aud;
+
+    const vaultExists = await Vault.findOne({ _id: vaultId });
+
+    if (!vaultExists) {
+      throw createError.Conflict(`Vault with ID ${vault} doensn't exist.`);
+    } else {
+      //check if user has access to the vault
+      const userIsVaultOwner = vaultExists.owner.toString() === userId;
+      const vaultIsSharedWithUser = vaultExists.shared
+        ? vaultExists.shared.map((el) => el.toString()).includes(userId)
+        : false;
+
+      if (!userIsVaultOwner && !vaultIsSharedWithUser)
+        throw createError.Unauthorized();
+
+      debug(`${today.format("M")}-01-${today.format("YYYY")}`);
+      debug(today.format("MM-DD-YYYY"));
+
+      // if from and to is given return expenses within this time frame if not return the last 31 days
+      let expenses = await Expense.find({
+        dateCreated: {
+          $gte: `${today.format("YYYY")}-${today.format("M")}-01`,
+          $lte: `${today.add(1, "d").format("YYYY-MM-DD")}T00:00:00.0Z`,
+        },
+      });
 
       res.send(expenses);
     }

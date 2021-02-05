@@ -14,9 +14,15 @@ router.delete("/:expenseId", verfiyAccessToken, ExspensesController.delete);
 
 // get all expsenses for a vault PARAMTER BODY filters via searchParameters -> req.query array
 router.get(
-  "/vault/:vaultId/",
+  "/vault/:vaultId/timeframe",
   verfiyAccessToken,
   ExspensesController.getVaultExpenses
+);
+
+router.get(
+  "/vault/:vaultId",
+  verfiyAccessToken,
+  ExspensesController.getCurrentMonth
 );
 
 module.exports = router;
