@@ -299,30 +299,30 @@ module.exports = {
 
     const vaultExists = await Vault.findOne({ _id: vaultId });
 
-    if (!vaultExists) {
+    if (!vaultExists)
       throw createError.Conflict(`Vault with ID ${vault} doensn't exist.`);
-    } else {
-      //check if user has access to the vault
-      const userIsVaultOwner = vaultExists.owner.toString() === userId;
-      const vaultIsSharedWithUser = vaultExists.shared
-        ? vaultExists.shared.map((el) => el.toString()).includes(userId)
-        : false;
 
-      if (!userIsVaultOwner && !vaultIsSharedWithUser)
-        throw createError.Unauthorized();
+    //check if user has access to the vault
+    const userIsVaultOwner = vaultExists.owner.toString() === userId;
+    const vaultIsSharedWithUser = vaultExists.shared
+      ? vaultExists.shared.map((el) => el.toString()).includes(userId)
+      : false;
 
-      debug(`${today.format("M")}-01-${today.format("YYYY")}`);
-      debug(today.format("MM-DD-YYYY"));
+    if (!userIsVaultOwner && !vaultIsSharedWithUser)
+      throw createError.Unauthorized();
 
-      // if from and to is given return expenses within this time frame if not return the last 31 days
-      let expenses = await Expense.find({
-        dateCreated: {
-          $gte: `${today.format("YYYY")}-${today.format("M")}-01`,
-          $lte: `${today.add(1, "d").format("YYYY-MM-DD")}T00:00:00.0Z`,
-        },
-      });
+    debug(`${today.format("M")}-01-${today.format("YYYY")}`);
+    debug(today.format("MM-DD-YYYY"));
 
-      res.send(expenses);
-    }
+    // if from and to is given return expenses within this time frame if not return the last 31 days
+    let expenses = await Expense.find({
+      vault: vaultId,
+      dateCreated: {
+        $gte: `${today.format("YYYY")}-${today.format("M")}-01`,
+        $lte: `${today.add(1, "d").format("YYYY-MM-DD")}T00:00:00.0Z`,
+      },
+    });
+
+    res.send(expenses);
   },
 };

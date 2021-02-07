@@ -2,6 +2,7 @@ const debug = require("debug")("dev:vaults");
 const createError = require("http-errors");
 const vaultsValidation = require("../helpers/validations/vaults.validation");
 const Vault = require("../models/vault.model");
+const SellingPoint = require("../models/sellingPoint.model");
 const User = require("../models/user.model");
 var ObjectId = require("mongoose").Types.ObjectId;
 
@@ -49,7 +50,7 @@ module.exports = {
         throw createError.Conflict(`Invalid ID ${vaultId}.`);
       }
 
-      let vault = await Vault.findOne({ _id: vaultId }, { __V: 0 });
+      let vault = await Vault.findOne({ _id: vaultId }, { __v: 0 });
       if (!vault) {
         throw createError.Conflict(
           `Could not find a vault with ID: ${vaultId}.`
@@ -71,12 +72,22 @@ module.exports = {
         { password: 0, __v: 0, role: 0, mainVault: 0 }
       );
 
-      // replace ID with user objects
-      vault.owner = owner;
-      vault.shared = sharedUsers;
+      const sellingPointsPromises = vault.sellingPoints.map((sp) => {
+        return SellingPoint.findOne({ _id: sp._id }, { __v: 0 });
+      });
+
+      const sellingPoints = await Promise.all(sellingPointsPromises);
+
+      const result = {
+        _id: vault._id.toString(),
+        name: vault.name,
+        owner: owner,
+        shared: sharedUsers,
+        sellingPoints: sellingPoints,
+      };
 
       if (isSharedWithUser || isOwnerOfTheVault) {
-        res.send(vault);
+        res.send(result);
       } else {
         next(createError.Unauthorized());
       }
