@@ -17,6 +17,9 @@ const SellingPointSchema = new Schema({
     maxlength: 2,
     required: true,
   },
+  color: {
+    type: String,
+  },
   category: {
     type: String,
     required: true,

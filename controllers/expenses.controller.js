@@ -250,13 +250,7 @@ module.exports = {
       if (!userIsVaultOwner && !vaultIsSharedWithUser)
         throw createError.Unauthorized();
 
-      // if from and to is given return expenses within this time frame if not return the last 31 days
       const today = new Date();
-
-      //TODO: validate from and  to as valid dates to is toDate 0:0:0 am that means that every expense within the to day is not show. Increase the to date by 1 day
-
-      debug("FROM ", from);
-      debug("TO ", to);
 
       if ((from && to) || (from && !to)) {
         const expenses = await Expense.find({

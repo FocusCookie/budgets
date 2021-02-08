@@ -83,8 +83,12 @@ module.exports = {
       validSellingPoint.name = validSellingPoint.name.toLowerCase();
       validSellingPoint.initials = validSellingPoint.initials.toLowerCase();
 
+      if (!validSellingPoint.color) {
+        validSellingPoint.color = "primary"; // of no color was given the app primary color will be set
+      }
+
       // check if category exists
-      if (!categories[validSellingPoint.category])
+      if (!categories.some((cat) => cat.title === validSellingPoint.category))
         throw createError.Conflict(
           `The category ${validSellingPoint.category} is not allowed.`
         );
