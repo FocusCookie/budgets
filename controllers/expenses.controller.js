@@ -251,43 +251,29 @@ module.exports = {
         throw createError.Unauthorized();
 
       // if from and to is given return expenses within this time frame if not return the last 31 days
-      let expenses;
       const today = new Date();
 
       //TODO: validate from and  to as valid dates to is toDate 0:0:0 am that means that every expense within the to day is not show. Increase the to date by 1 day
 
-      const toDate = to
-        ? to
-            .toString()
-            .split("-")
-            .map((el, i) => (i !== 1 ? el : parseInt(el) + 1))
-        : null;
+      debug("FROM ", from);
+      debug("TO ", to);
 
       if ((from && to) || (from && !to)) {
-        expenses = await Expense.find({
+        const expenses = await Expense.find({
+          vault: vaultId,
           dateCreated: {
             $gte: from,
-            $lte: toDate,
+            $lte: to
+              ? to
+              : `${today.getMonth() + 1}-${
+                  today.getDate() + 1
+                }-${today.getFullYear()}`,
           },
         });
+        res.send(expenses);
       } else {
-        const month = today.getMonth() + 1; // jan is = 0 every month is off by 1
-        const year = today.getFullYear();
-
-        debug(month, year);
-
-        expenses = await Expense.aggregate([
-          {
-            $addFields: {
-              year: { $year: "$dateCreated" },
-              month: { $month: "$dateCreated" },
-            },
-          },
-          { $match: { month: month, year: year } },
-        ]);
+        throw createError.Conflict("Please set at least the from date.");
       }
-
-      res.send(expenses);
     }
   },
 
