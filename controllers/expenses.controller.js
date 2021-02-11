@@ -60,6 +60,11 @@ module.exports = {
         .map((el) => el.toString())
         .includes(sellingPoint);
 
+      console.log(
+        "selling points of vault ",
+        vaultExists.sellingPoints.map((el) => el.toString())
+      );
+
       // if the sellingPoint is not attached to the vault attach it
       if (!sellingPointExistInVault) {
         // store sellingPoint in vault

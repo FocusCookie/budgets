@@ -118,8 +118,7 @@ module.exports = {
 
   setMainVault: async (req, res, next) => {
     try {
-      const tokenPayload = req.payload;
-      const requesterUserId = tokenPayload.aud; // aud = user id, can be viewd in the jwt helper
+      const requester = req.payload; // aud = user id, can be viewd in the jwt helper
       const userId = req.params.userId;
       const vaultId = req.params.vaultId;
 
@@ -139,13 +138,10 @@ module.exports = {
       const vaultOwner = vault.owner.toString();
       const vaultShared = vault.shared.map((share) => share.toString());
 
-      debug("requester ", requesterUserId);
-      debug("owner of vault ", vault.owner.toString());
-
       if (
-        user._id.toString() !== requesterUserId ||
-        (vaultOwner !== requesterUserId &&
-          !vaultShared.some((share) => share === requesterUserId))
+        user._id.toString() !== requester.aud ||
+        (vaultOwner !== requester.aud &&
+          !vaultShared.some((share) => share === requester.aud))
       ) {
         throw createError.Unauthorized();
       }
@@ -156,6 +152,29 @@ module.exports = {
       );
 
       res.status(204).send();
+    } catch (error) {
+      debug(error.message);
+      next(error);
+    }
+  },
+
+  resetMainVault: async (req, res, next) => {
+    try {
+      const requester = req.payload; // aud = user id, can be viewd in the jwt helper
+      const userId = req.params.userId;
+
+      const user = await User.findOne({ _id: userId });
+      if (!user) {
+        throw createError.Conflict(`User with ID ${userId} doesn't exists.`);
+      }
+
+      if (user._id.toString() === requester.aud || requester.role === "admin") {
+        await User.updateOne({ _id: userId }, { $unset: { mainVault: 1 } });
+
+        res.status(204).send();
+      } else {
+        throw createError.Unauthorized();
+      }
     } catch (error) {
       debug(error.message);
       next(error);

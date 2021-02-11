@@ -11,5 +11,10 @@ router.post(
   verfiyAccessToken,
   UsersController.setMainVault
 );
+router.delete(
+  "/:userId/mainvault",
+  verfiyAccessToken,
+  UsersController.resetMainVault
+);
 
 module.exports = router;
