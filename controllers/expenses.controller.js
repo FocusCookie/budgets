@@ -207,7 +207,7 @@ module.exports = {
         }
 
         // store sellingPoint in vault
-        await Vault.update(
+        await Vault.updateOne(
           { _id: expenseExists.vault },
           { $push: { sellingPoints: new ObjectId(sellingPoint) } }
         );
