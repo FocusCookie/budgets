@@ -8,6 +8,7 @@ const expensesValidation = require("../helpers/validations/expenses.validation")
 const bcrypt = require("bcrypt");
 var ObjectId = require("mongoose").Types.ObjectId;
 const moment = require("moment");
+const { valid } = require("joi");
 
 module.exports = {
   create: async (req, res, next) => {
@@ -60,11 +61,6 @@ module.exports = {
         .map((el) => el.toString())
         .includes(sellingPoint);
 
-      console.log(
-        "selling points of vault ",
-        vaultExists.sellingPoints.map((el) => el.toString())
-      );
-
       // if the sellingPoint is not attached to the vault attach it
       if (!sellingPointExistInVault) {
         // store sellingPoint in vault
@@ -81,16 +77,65 @@ module.exports = {
       // add owner of the Expense
       validatedExpense.owner = new ObjectId(userId);
 
-      // initialize the images and comments array
-      validatedExpense.comments = [];
-      validatedExpense.images = [];
+      if (validatedExpense.recurring) {
+        if (!validatedExpense.recurringLastMonth)
+          throw createError.Conflict(
+            "Recurring is enabled, please provide the last month, when the recurring should be executed."
+          );
 
-      // store expense
-      const expense = new Expense(validatedExpense);
-      const savedExpense = await expense.save();
-      validatedExpense._id = savedExpense._id.toString();
+        const today = new Date();
 
-      res.send(savedExpense);
+        const thisMonth = moment(
+          `${today.getFullYear()}-${today.getMonth() + 1}-01`,
+          "YYYY-MM-DD"
+        ).format("YYYY-MM-DD");
+
+        const untilIncludingMonth = moment(
+          validatedExpense.recurringLastMonth,
+          "YYYY-MM"
+        ).format("YYYY-MM-DD");
+
+        const monthsToRecurreExpense = moment(untilIncludingMonth).diff(
+          thisMonth,
+          "months"
+        );
+
+        // check if the last month of the recurring is in the future
+        if (monthsToRecurreExpense <= 0)
+          throw createError.Conflict(
+            "The last month of recurring can not be in the past or today."
+          );
+
+        const futureExpenses = [];
+
+        for (let month = 0; month <= monthsToRecurreExpense; month++) {
+          const futureDateCreated = moment(thisMonth)
+            .add(1, "day") // necessary to avoid UTC time shifts because day 1 of the months is in UTS last day of month befor with 23 uhr
+            .add(month, "M")
+            .toString();
+          let futureExpense = {
+            ...validatedExpense,
+            dateCreated: futureDateCreated,
+          };
+
+          futureExpenses.push(new Expense(futureExpense));
+        }
+
+        const creationPromises = futureExpenses.map((exp) => {
+          return exp.save();
+        });
+
+        const expenses = await Promise.all(creationPromises);
+
+        res.send(expenses);
+      } else {
+        // store expense
+        const expense = new Expense(validatedExpense);
+        const savedExpense = await expense.save();
+        validatedExpense._id = savedExpense._id.toString();
+
+        res.send(savedExpense);
+      }
     } catch (error) {
       if (error.isJoi === true) error.status = 422;
 
