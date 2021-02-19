@@ -1,0 +1,27 @@
+version: "3"
+services:
+  budgets-mongo:
+    container_name: budgets-mongo
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+  budgets-redis: # this name can be use as the host for the redis client in nodejs
+    container_name: budgets-redis
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+  budgets-app:
+    container_name: budgets
+    image: latest/budgets
+    restart: always
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    links:
+      - budgets-mongo
+      - budgets-redis

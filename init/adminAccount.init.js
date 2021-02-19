@@ -2,9 +2,9 @@ const debug = require("debug")("app:adminUser-init");
 const User = require("../models/user.model");
 
 const adminAccount = {
-  name: "Admin",
-  email: "admin@app.com",
-  password: "admin1234",
+  name: process.env.ADMIN_NAME,
+  email: process.env.ADMIN_MAIL,
+  password: process.env.ADMIN_PW,
   role: "admin",
 };
 
@@ -15,7 +15,7 @@ function createAdminAccount(account) {
         const admin = new User(account);
         admin.save().then(() => {
           resolve(
-            "Admin Account successfully created. Email: admin@app.com and Password: admin1234"
+            `Admin Account successfully created. Email: ${process.env.ADMIN_MAIL} and Password: ${process.env.ADMIN_PW}`
           );
         });
       } else {
