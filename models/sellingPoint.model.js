@@ -10,16 +10,6 @@ const SellingPointSchema = new Schema({
     required: true,
     maxlength: 50,
   },
-  initials: {
-    type: String,
-    required: true,
-    lowercase: true,
-    maxlength: 2,
-    required: true,
-  },
-  color: {
-    type: String,
-  },
   category: {
     type: String,
     required: true,
