@@ -5,7 +5,6 @@ module.exports = [
   { title: "food groceries", icon: "mdi-cart-variant" },
   { title: "drug groceries", icon: "mdi-lipstick" },
   { title: "books", icon: "mdi-book" },
-  { title: "food delivery", icon: "mdi-basket-outline" },
   { title: "coffee", icon: "mdi-coffee-to-go" },
   { title: "online shop", icon: "mdi-basket" },
   { title: "other", icon: "mdi-cash" },

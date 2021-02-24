@@ -4,7 +4,6 @@ const sellingPointsValidation = require("../helpers/validations/sellingPoints.va
 const categories = require("../helpers/categories.helper");
 const SellingPoint = require("../models/sellingPoint.model");
 const User = require("../models/user.model");
-const Vault = require("../models/vault.model");
 var ObjectId = require("mongoose").Types.ObjectId;
 
 module.exports = {
@@ -81,11 +80,6 @@ module.exports = {
 
       // the name should be stored in lower case
       validSellingPoint.name = validSellingPoint.name.toLowerCase();
-      validSellingPoint.initials = validSellingPoint.initials.toLowerCase();
-
-      if (!validSellingPoint.color) {
-        validSellingPoint.color = "primary"; // of no color was given the app primary color will be set
-      }
 
       // check if category exists
       if (!categories.some((cat) => cat.title === validSellingPoint.category))
