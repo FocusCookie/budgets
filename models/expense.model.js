@@ -8,7 +8,7 @@ const ExpenseSchema = new Schema({
     default: Date.now,
   },
   sum: {
-    type: String, // sum will be stored hashed!
+    type: Number, // sum will be stored hashed!
     required: true,
   },
   type: {
