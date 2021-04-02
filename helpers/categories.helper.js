@@ -1,12 +1,10 @@
 module.exports = [
   { title: "food delivery", icon: "mdi-moped" },
-  { title: "movie streaming", icon: "mdi-movie" },
-  { title: "music streaming", icon: "mdi-headphones" },
   { title: "food groceries", icon: "mdi-cart-variant" },
   { title: "drug groceries", icon: "mdi-lipstick" },
   { title: "books", icon: "mdi-book" },
   { title: "coffee", icon: "mdi-coffee-to-go" },
-  { title: "online shop", icon: "mdi-basket" },
+  { title: "online shopping", icon: "mdi-basket" },
   { title: "other", icon: "mdi-cash" },
   { title: "backery", icon: "mdi-cupcake" },
   { title: "games", icon: "mdi-gamepad-variant-outline" },
@@ -15,7 +13,7 @@ module.exports = [
   { title: "rent", icon: "mdi-home-city" },
   { title: "phone", icon: "mdi-phone" },
   { title: "internet", icon: "mdi-at" },
-  { title: "subscription", icon: "mdi-playlist-check" },
+  { title: "subscriptions", icon: "mdi-playlist-check" },
   { title: "restaurant", icon: "mdi-silverware-fork-knife" },
-  { title: "fincance", icon: "mdi-bank" },
+  { title: "finance", icon: "mdi-bank" },
 ];
