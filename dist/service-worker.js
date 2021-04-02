@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.28a535d0b62197d96757ed3bccaabfac.js"
+  "/precache-manifest.7bdeb177b66a20abbd95e09cd3ce27ce.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "budgets-app"});
