@@ -1,2 +1,2 @@
 # budgets
-An multi user money budgeting app.
+The Backend Application of An multi user money budgeting app.
